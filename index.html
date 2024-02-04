@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #alarm-display {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        #alarm-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="alarm-display">
+            {% if alarm_time %}
+                <p>Alarm set for {{ alarm_time.strftime('%H:%M') }}</p>
+            {% else %}
+                <p>No alarm set</p>
+            {% endif %}
+        </div>
+        <form id="alarm-form" action="/set_alarm" method="post">
+            <label for="hour">Hour:</label>
+            <input type="number" name="hour" min="0" max="23" required>
+            <label for="minute">Minute:</label>
+            <input type="number" name="minute" min="0" max="59" required>
+            <button type="submit" class="btn btn-primary mt-3">Set Alarm</button>
+        </form>
+    </div>
+</body>
+</html>
