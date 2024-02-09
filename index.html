@@ -7,16 +7,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
+            background: radial-gradient(circle, #ff7e5f, #feb47b, #ffed99); /* Colorful radial gradient background */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
         }
 
         .container {
             text-align: center;
+            color: #000; /* Black text color */
         }
 
         #alarm-display {
@@ -28,25 +31,83 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background for the form */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+
+        label {
+            margin-bottom: 10px;
+            color: #000; /* Black text color */
+        }
+
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid #ced4da; /* Gray border */
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff; /* Blue button color */
+            color: #fff; /* White text color */
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Digital clock styling */
+        .digital-clock {
+            font-size: 3em;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="alarm-display">
-            {% if alarm_time %}
-                <p>Alarm set for {{ alarm_time.strftime('%H:%M') }}</p>
-            {% else %}
-                <p>No alarm set</p>
-            {% endif %}
+            <p>No alarm set</p>
         </div>
         <form id="alarm-form" action="/set_alarm" method="post">
             <label for="hour">Hour:</label>
-            <input type="number" name="hour" min="0" max="23" required>
+            <input type="number" name="hour" min="1" max="12" required>
             <label for="minute">Minute:</label>
             <input type="number" name="minute" min="0" max="59" required>
+            <label for="ampm">AM/PM:</label>
+            <select name="ampm" id="ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
             <button type="submit" class="btn btn-primary mt-3">Set Alarm</button>
         </form>
+        
+        <!-- Digital clock -->
+        <div class="digital-clock" id="digital-clock"></div>
+
+        <!-- Audio element for the alarm sound -->
+        <audio id="alarm-sound" src="your-music-file.mp3" preload="auto"></audio>
     </div>
+
+    <!-- Script for digital clock and alarm -->
+    <script>
+        function updateDigitalClock() {
+            const now = new Date();
+            const hours = now.getHours() % 12 || 12; // Convert 0 to 12 for 12-hour format
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = now.getHours() >= 12 ? 'PM' : 'AM'; // Determine AM/PM
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('digital-clock').textContent = timeString;
+        }
+
+        setInterval(updateDigitalClock, 1000);
+    </script>
 </body>
 </html>
